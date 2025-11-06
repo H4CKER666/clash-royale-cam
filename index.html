@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clash Royale Cam</title>
+<style>
+body {
+  margin: 0;
+  background: #0a2a66;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+  font-family: sans-serif;
+}
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+h1 {
+  position: absolute;
+  top: 20px;
+  text-shadow: 2px 2px 4px black;
+}
+</style>
+</head>
+<body>
+
+<h1>CLASH ROYALE CAM 👑</h1>
+<video id="cam" autoplay playsinline></video>
+
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    document.getElementById('cam').srcObject = stream;
+  })
+  .catch(err => alert("Error al activar cámara: " + err));
+</script>
+
+</body>
+</html>
