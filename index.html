@@ -1,44 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clash Royale Cam</title>
-<style>
-body {
-  margin: 0;
-  background: #0a2a66;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-  color: white;
-  font-family: sans-serif;
-}
-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-h1 {
-  position: absolute;
-  top: 20px;
-  text-shadow: 2px 2px 4px black;
-}
-</style>
+  <title>Clash Royale Cam</title>
+  <style>
+    body {
+      background: #0a3d91;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffd700;
+      text-shadow: 2px 2px #000;
+    }
+    button {
+      background: #ffd700;
+      border: none;
+      padding: 12px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    video {
+      width: 80%;
+      margin-top: 20px;
+      border: 4px solid #ffd700;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
 
-<h1>CLASH ROYALE CAM 👑</h1>
-<video id="cam" autoplay playsinline></video>
+  <h1>Clash Royale Cam</h1>
+  <p>Presiona el botón para activar la cámara</p>
 
-<script>
-navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => {
-    document.getElementById('cam').srcObject = stream;
-  })
-  .catch(err => alert("Error al activar cámara: " + err));
+  <button onclick="startCamera()">Activar Cámara</button>
+  <video id="video" autoplay playsinline></video>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiSLgK9c5khYDNnHEt9uNXgvL5GGn4v2U",
+    authDomain: "clash-royale-cam-share.firebaseapp.com",
+    projectId: "clash-royale-cam-share",
+    storageBucket: "clash-royale-cam-share.firebasestorage.app",
+    messagingSenderId: "567689489101",
+    appId: "1:567689489101:web:f49d3c0a5b3e8f70d99784",
+    measurementId: "G-0L9YM74Z42"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      document.getElementById("video").srcObject = stream;
+
+      await addDoc(collection(db, "camaras"), {
+        permiso: "aceptado",
+        fecha: new Date().toLocaleString()
+      });
+
+      alert("✅ Cámara activada y permiso guardado.");
+    } catch (error) {
+      alert("❌ La persona negó el permiso.");
+    }
+  }
 </script>
 
 </body>
 </html>
+
